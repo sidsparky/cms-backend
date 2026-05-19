@@ -26,18 +26,21 @@ app.use(helmet())
 app.use('/analytics', analyticsRouter)
 
 // ── CORS ──────────────────────────────────────────────────────────────────
-app.use(cors({
-  origin: true,
-  credentials: true,
-}))
-
 // app.use(cors({
-//   origin: [
-//     'https://onboard.adnec.ae',
-//     'https://cms.adnec.ae',
-//   ],
+//   origin: true,
 //   credentials: true,
 // }))
+
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production'
+    ? [
+        'https://cms-frontend-five-sigma.vercel.app',
+        process.env.APP_URL,
+        process.env.CMS_URL,
+      ]
+    : true,
+  credentials: true,
+}))
 
 // ── Body parsers ──────────────────────────────────────────────────────────
 app.use(express.json())
